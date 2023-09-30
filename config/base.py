@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     *DJANGO_APP,
     *PYPI_MODULES,
     "apps.account",
-    "core.lib.wallet",
     "apps.coin",
     "apps.exchange",
 ]
