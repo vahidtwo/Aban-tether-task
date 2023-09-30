@@ -23,12 +23,7 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
-PYPI_MODULES = [
-    "rest_framework",
-    "corsheaders",
-    "drf_spectacular_sidecar",
-    "drf_spectacular",
-]
+PYPI_MODULES = ["rest_framework", "corsheaders", "drf_spectacular_sidecar", "drf_spectacular", "django_filters"]
 DJANGO_APP = [
     "jazzmin",
     "django.contrib.admin",
@@ -163,6 +158,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
     "EXCEPTION_HANDLER": "config.exception_handlers.hacksoft_proposed_exception_handler",
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
 }
 
 LOCALE_PATHS = [BASE_DIR / "locale"]
