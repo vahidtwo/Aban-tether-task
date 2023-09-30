@@ -5,10 +5,9 @@ We don't bind behaviour to http method handlers yet,
 which allows mixin classes to be composed in interesting ways.
 
 """
-from rest_framework import status, mixins, filters
+from rest_framework import status, mixins
 
 from core.http import Response
-from core.pagination import CustomPagination
 
 
 class CreateModelMixin(mixins.CreateModelMixin):

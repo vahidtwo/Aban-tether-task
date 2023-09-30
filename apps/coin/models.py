@@ -2,6 +2,7 @@ from django.db import models
 
 from core.models import BaseModel
 from django.utils.translation import gettext_lazy as _
+from decimal import Decimal
 
 
 def get_coin_image(coin: "Coin", file_name: str) -> str:
@@ -41,12 +42,13 @@ class Coin(BaseModel):
     name = models.CharField(max_length=50, unique=True, verbose_name=_("name"), db_index=True)
     symbol = models.CharField(max_length=10, unique=True, verbose_name=_("symbol"), db_index=True)
     icon = models.ImageField(null=True, blank=True, verbose_name=_("icon"), upload_to=get_coin_image)
-    network = models.ForeignKey("coin.Network", on_delete=models.PROTECT, related_name="coins", editable=False)
+    # TODO: network can be Many-to-many if one coin can act on multiple network search
+    network = models.ForeignKey("coin.Network", on_delete=models.PROTECT, related_name="coins")
     exchange = models.ForeignKey(
-        "exchange.ExchangeSite", null=True, blank=True, on_delete=models.PROTECT, related_name="coins", editable=False
+        "exchange.ExchangeSite", null=True, blank=True, on_delete=models.PROTECT, related_name="coins"
     )
 
-    def get_price(self) -> float:
+    def get_price(self) -> Decimal:
         """
         Fetch the price of the coin from the market.
 
@@ -56,6 +58,8 @@ class Coin(BaseModel):
         from apps.coin.utils import get_coin_price_from_market
 
         return get_coin_price_from_market(self.symbol)
+
+    get_price.short_description = _("price")
 
     class Meta:
         verbose_name = _("coin")

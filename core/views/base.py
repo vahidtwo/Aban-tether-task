@@ -3,9 +3,6 @@ Views
 Contains BaseView support mutilple serializer and permissions per action
 """
 
-import asyncio
-
-from django.db.models import QuerySet
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.serializers import Serializer
@@ -14,18 +11,7 @@ from rest_framework.settings import api_settings
 from . import mixins
 
 
-class BaseModelViewSet(
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    mixins.ListModelMixin,
-    viewsets.ModelViewSet,
-):
-    pass
-
-
-class BaseView(BaseModelViewSet):
+class BaseView(viewsets.ModelViewSet):
     """
     BaseView
     Support mutilple serializer and permissions per action
@@ -165,3 +151,14 @@ class BaseView(BaseModelViewSet):
                 else:
                     self._paginator = None
         return self._paginator
+
+
+class BaseViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    BaseView,
+):
+    pass
