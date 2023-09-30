@@ -1,0 +1,2 @@
+class UserWallerException(Exception):
+    pass
