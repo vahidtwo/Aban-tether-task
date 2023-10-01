@@ -22,6 +22,10 @@ class BaseModel(models.Model):
 class WalletBaseModel(models.Model):
     current_balance = CURRENCY_STORE_FIELD(default=0)
 
+    @property
+    def transaction_relation(self):
+        return self.transaction_set
+
     class Meta:
         abstract = True
         verbose_name = _("wallet")
@@ -33,7 +37,7 @@ class WalletBaseModel(models.Model):
         Also creates a new transaction with the deposit
         value.
         """
-        self.transaction_set.create(value=value, total_balance=self.current_balance + value)
+        self.transaction_relation.create(value=value, total_balance=self.current_balance + value)
         self.current_balance += value
         self.save()
 
@@ -53,7 +57,7 @@ class WalletBaseModel(models.Model):
         if value > self.current_balance:
             raise InsufficientBalance("This wallet has insufficient balance.")
 
-        self.transaction_set.create(value=-value, total_balance=self.current_balance - value)
+        self.transaction_relation.create(value=-value, total_balance=self.current_balance - value)
         self.current_balance -= value
         self.save()
 

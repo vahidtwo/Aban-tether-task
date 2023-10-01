@@ -88,6 +88,10 @@ class UserWallet(WalletBaseModel):
         verbose_name = _("user wallet")
         verbose_name_plural = _("user wallets")
 
+    @property
+    def transaction_relation(self):
+        return self.userwallettransaction_set
+
 
 class UserWalletTransaction(WalletTransactionBaseModel):
     """
@@ -128,6 +132,10 @@ class UserCryptoWallet(LifecycleModelMixin, TimeStampedBaseModel, WalletBaseMode
     class Meta:
         verbose_name = _("user crypto")
         verbose_name_plural = _("user cryptos")
+
+    @property
+    def transaction_relation(self):
+        return self.usercryptowallettransaction_set
 
 
 class UserCryptoWalletTransaction(WalletTransactionBaseModel):
