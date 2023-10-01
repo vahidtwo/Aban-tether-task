@@ -29,18 +29,17 @@ def compute_task(coin_id: uuid.uuid4):
     Complete orders accord to requested coin on orders
     the orders send to exchange when aggregate of order-price rich to 10$
     """
-    orders = (
-        Order.objects.filter(status__in=[Order.OrderStatus.BUY_FROM_EXCHANGE, Order.OrderStatus.ADDED_TO_USER_WALLET])
-        .annotate(sum_order_price=Sum("total_price") - Sum("transfer_fee"))
-        .filter(sum_order_price__gte=10)  # TODO it must get limit of order from gateway of related exchange
+    orders = Order.objects.exclude(
+        status__in=[Order.OrderStatus.BUY_FROM_EXCHANGE, Order.OrderStatus.ADDED_TO_USER_WALLET]
     )
-    if orders.exists():
+    sum_of_order = orders.aggregate(sum=Sum("total_price") - Sum("transfer_fee"))["sum"] or 0
+    if orders.exists() and sum_of_order >= 10:  # TODO it must get limit of order from gateway of related exchange
         with transaction.atomic():
             coin = Coin.objects.get(id=coin_id)
             orders = orders.select_for_update()
             orders.update(status=Order.OrderStatus.SEND_TO_EXCHANGE)
             result = ExchangeManager(coin).buy(
-                amount=coin.orders_price
+                amount=sum_of_order
             )  # TODO it must be async function that must await here
             match result.status_code:
                 case status.HTTP_200_OK:
