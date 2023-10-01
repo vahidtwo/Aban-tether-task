@@ -20,7 +20,7 @@ def try_to_complete_orders(coin_id: uuid.uuid4):
     # for limitation of time this implement like this
     while check_task_is_running("apps.exchange.tasks.compute_task"):
         time.sleep(0.5)
-    compute_task.deley(args=[coin_id])
+    compute_task.delay(coin_id)
 
 
 @shared_task
@@ -31,7 +31,7 @@ def compute_task(coin_id: uuid.uuid4):
     """
     orders = (
         Order.objects.filter(status__in=[Order.OrderStatus.BUY_FROM_EXCHANGE, Order.OrderStatus.ADDED_TO_USER_WALLET])
-        .annotate(sum_order_price=Sum("total_amount") - Sum("transfer_fee"))
+        .annotate(sum_order_price=Sum("total_price") - Sum("transfer_fee"))
         .filter(sum_order_price__gte=10)  # TODO it must get limit of order from gateway of related exchange
     )
     if orders.exists():
