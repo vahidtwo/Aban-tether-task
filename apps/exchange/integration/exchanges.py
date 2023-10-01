@@ -1,67 +1,75 @@
-from typing import Type
+from decimal import Decimal
 
-from apps.exchange.exchange_schema import ExchangeABC, ResultOfExchange, ExchangeManagerABC, ExchangeNotFound
+from apps.coin.models import Coin
+from apps.exchange.integration import ResultOfExchange
+from apps.exchange.integration.exception import ExchangeNotFound
+from apps.exchange.integration.exchange_schema import (
+    ExchangeABC,
+    ExchangeManagerABC,
+)
 from config import env
+
+# TODO it must be replace all exchangeABC functions to async
 
 
 class BinanceExchange(ExchangeABC):
-    api_key = env("binance_exchange_api_key")
+    api_key = env("binance_exchange_api_key", default="")
     gate_way = "https://api.binance.com"
 
-    def transfer(self, to_wallet: str, amount: float, currency: str) -> ResultOfExchange:
+    def transfer(self, to_wallet: str, amount: Decimal, currency: str) -> ResultOfExchange:
         """transfer amount of a currency from one wallet to another wallet"""
         print(f"transfer {amount}[{currency}] to wallet {to_wallet} from {self.__class__.__name__}")
-        return ResultOfExchange(status=200, result="ok")
+        return ResultOfExchange(status_code=200, result_message="ok")
 
-    def buy(self, amount: float, currency: str) -> ResultOfExchange:
+    def buy(self, amount: Decimal, currency: str) -> ResultOfExchange:
         """buy amount of currency from exchange"""
         print(f"buy {amount}[{currency}] from {self.__class__.__name__}")
-        return ResultOfExchange(status=200, result="ok")
+        return ResultOfExchange(status_code=200, result_message="ok")
 
-    def sell(self, amount: float, currency: str) -> ResultOfExchange:
+    def sell(self, amount: Decimal, currency: str) -> ResultOfExchange:
         """sell amount of currency from exchange"""
         print(f"sell {amount}[{currency}] from {self.__class__.__name__}")
-        return ResultOfExchange(status=200, result="ok")
+        return ResultOfExchange(status_code=200, result_message="ok")
 
 
 class CoinBaseExchange(ExchangeABC):
-    api_key = env("coinbase_exchange_api_key")
+    api_key = env("coinbase_exchange_api_key", default="")
     gate_way = "https://api.coinbase.com"
 
-    def transfer(self, to_wallet: str, amount: float, currency: str) -> ResultOfExchange:
+    def transfer(self, to_wallet: str, amount: Decimal, currency: str) -> ResultOfExchange:
         """transfer amount of a currency from one wallet to another wallet"""
         print(f"transfer {amount}[{currency}] to wallet {to_wallet} from {self.__class__.__name__}")
-        return ResultOfExchange(status=200, result="ok")
+        return ResultOfExchange(status_code=200, result_message="ok")
 
-    def buy(self, amount: float, currency: str) -> ResultOfExchange:
+    def buy(self, amount: Decimal, currency: str) -> ResultOfExchange:
         """buy amount of currency from exchange"""
         print(f"buy {amount}[{currency}] from {self.__class__.__name__}")
-        return ResultOfExchange(status=200, result="ok")
+        return ResultOfExchange(status_code=200, result_message="ok")
 
-    def sell(self, amount: float, currency: str) -> ResultOfExchange:
+    def sell(self, amount: Decimal, currency: str) -> ResultOfExchange:
         """sell amount of currency from exchange"""
         print(f"sell {amount}[{currency}] from {self.__class__.__name__}")
-        return ResultOfExchange(status=200, result="ok")
+        return ResultOfExchange(status_code=200, result_message="ok")
 
 
 class KuCoinExchange(ExchangeABC):
-    api_key = env("kocoin_exchange_api_key")
+    api_key = env("kocoin_exchange_api_key", default="")
     gate_way = "https://api.kocoin.com"
 
-    def transfer(self, to_wallet: str, amount: float, currency: str) -> ResultOfExchange:
+    def transfer(self, to_wallet: str, amount: Decimal, currency: str) -> ResultOfExchange:
         """transfer amount of a currency from one wallet to another wallet"""
         print(f"transfer {amount}[{currency}] to wallet {to_wallet} from {self.__class__.__name__}")
-        return ResultOfExchange(status=200, result="ok")
+        return ResultOfExchange(status_code=200, result_message="ok")
 
-    def buy(self, amount: float, currency: str) -> ResultOfExchange:
+    def buy(self, amount: Decimal, currency: str) -> ResultOfExchange:
         """buy amount of currency from exchange"""
         print(f"buy {amount}[{currency}] from {self.__class__.__name__}")
-        return ResultOfExchange(status=200, result="ok")
+        return ResultOfExchange(status_code=200, result_message="ok")
 
-    def sell(self, amount: float, currency: str) -> ResultOfExchange:
+    def sell(self, amount: Decimal, currency: str) -> ResultOfExchange:
         """sell amount of currency from exchange"""
         print(f"sell {amount}[{currency}] from {self.__class__.__name__}")
-        return ResultOfExchange(status=200, result="ok")
+        return ResultOfExchange(status_code=200, result_message="ok")
 
 
 class ExchangeManager(ExchangeManagerABC):
@@ -74,17 +82,18 @@ class ExchangeManager(ExchangeManagerABC):
         get exchange
         >>> ExchangeManager.get_exchange_from_coins(coin=coin)
         buy currency
-        >>> ExchangeManager(coin).buy(10.2)
+        >>> ExchangeManager(coin).buy(Decimal(10.2))
         sell currency
-        >>> ExchangeManager(coin).sell(10.2)
+        >>> ExchangeManager(coin).sell(Decimal(10.2))
         transfer currency
-        >>> ExchangeManager(coin).transfer(to_wallet=user_wallet, amount=10.2)
+        >>> ExchangeManager(coin).transfer(to_wallet=user_wallet, amount=Decimal(10.2))
     """
 
     @staticmethod
-    def get_exchange_from_coins(coin: "Coin") -> ExchangeABC:
+    def get_exchange_from_coins(coin: Coin) -> ExchangeABC:
         """return exchange class according to given coin"""
         if coin.exchange is None:
+            # TODO it could be implement in local network or handle it by business, ask about it for implementation
             raise ExchangeNotFound(f"exchange is empty for {coin.name}")
         match coin.exchange:
             case "binance":
