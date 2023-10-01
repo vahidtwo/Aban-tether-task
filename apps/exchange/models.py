@@ -57,10 +57,10 @@ class Order(LifecycleModelMixin, TimeStampedBaseModel):
         """
         Calculate total price and transfer tax before order creation.
         """
-        from apps.exchange.utils import get_transfer_tax
+        from apps.coin.utils import get_transfer_tax
 
-        self.transfer_tax = get_transfer_tax(self.coin, self.amount)
-        self.total_price = (self.coin_price * self.amount) + self.transfer_tax
+        self.transfer_fee = get_transfer_tax(self.coin, self.amount)
+        self.total_price = (self.coin_price * self.amount) + self.transfer_fee
 
     class Meta:
         verbose_name = _("order")
