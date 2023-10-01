@@ -21,10 +21,6 @@ class BaseModel(models.Model):
         - jalali_created_at: returns jalali format of created_at attr
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("updated at"))
-
     class Meta:
         abstract = True
 
@@ -36,20 +32,6 @@ class BaseModel(models.Model):
             return str(self.name)
 
         return "%s (%s)" % (self._meta.verbose_name, self.id)
-
-    def jalali_created_at(self):
-        """
-        returns jalali format of created_at attr
-        """
-        return datetime2jalali(self.created_at)
-
-    jalali_created_at.short_description = _("created_at")
-
-    jalali_created_at = property(jalali_created_at)
-
-    @property
-    def formatted_jalali_date(self):
-        return self.jalali_created_at.strftime("%d %b %Y")
 
 
 class TimeStampedBaseModel(BaseModel):

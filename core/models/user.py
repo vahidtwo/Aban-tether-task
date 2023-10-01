@@ -3,10 +3,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.account.managers import UserManager
-from .base import TimeStampedBaseModel
 
 
-class AbstractUser(TimeStampedBaseModel, DjangoAbstractUser):
+class AbstractUser(DjangoAbstractUser):
     objects = UserManager()
     is_active = models.BooleanField(  # duplicate name `is_active` in BaseModel and DjangoUserAdmin
         _("active"),
