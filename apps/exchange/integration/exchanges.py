@@ -95,7 +95,7 @@ class ExchangeManager(ExchangeManagerABC):
         if coin.exchange is None:
             # TODO it could be implement in local network or handle it by business, ask about it for implementation
             raise ExchangeNotFound(f"exchange is empty for {coin.name}")
-        match coin.exchange:
+        match coin.exchange.name:
             case "binance":
                 return BinanceExchange()
             case "coinbase":
