@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from apps.coin.models import Coin
-from apps.exchange.exchange_schema import ExchangeABC
+from apps.exchange.integration.exchange_schema import ExchangeABC
 
 
 def get_transfer_tax(coin: Coin, amount: Decimal) -> Decimal:
