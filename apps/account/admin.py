@@ -7,8 +7,9 @@ from django.contrib.auth.forms import (
 )
 from rest_framework.authtoken.models import TokenProxy
 
-from core.admin.base import BaseAdmin
+from core.admin.base import BaseAdmin, BaseTabularInline
 from . import models
+from .models import UserWallet, UserWalletTransaction, UserCryptoWalletTransaction, UserCryptoWallet
 
 
 class UserChangeForm(DjangoUserChangeForm):
@@ -39,6 +40,8 @@ class UserAdmin(UserAdmin, BaseAdmin):
                     "first_name",
                     "last_name",
                     "email",
+                    "role",
+                    "username",
                     "is_staff",
                     "password",
                 )
@@ -54,9 +57,34 @@ class UserAdmin(UserAdmin, BaseAdmin):
                     "password2",
                     "first_name",
                     "last_name",
+                    "role",
+                    "username",
                     "email",
                     "is_staff",
                 )
             },
         ),
     )
+
+
+# TODO it must readonly current balance and add feature to admin just can add wallet transaction
+# in following admin models:
+#    UserWalletTransactionInline   UserWalletAdmin   UserCryptoWalletTransactionInline  UserWalletAdmin
+class UserWalletTransactionInline(BaseTabularInline):
+    model = UserWalletTransaction
+
+
+@admin.register(UserWallet)
+class UserWalletAdmin(admin.ModelAdmin):
+    list_filter = ("user", "current_balance")
+    inlines = [UserWalletTransactionInline]
+
+
+class UserCryptoWalletTransactionInline(BaseTabularInline):
+    model = UserCryptoWalletTransaction
+
+
+@admin.register(UserCryptoWallet)
+class UserWalletAdmin(admin.ModelAdmin):
+    list_filter = ("user", "current_balance", "coin")
+    inlines = [UserCryptoWalletTransactionInline]
