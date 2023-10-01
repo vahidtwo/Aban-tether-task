@@ -57,7 +57,7 @@ class Coin(BaseModel):
         """
         from apps.coin.utils import get_coin_price_from_market
 
-        return get_coin_price_from_market(self.symbol)
+        return get_coin_price_from_market(self)
 
     get_price.short_description = _("price")
 
