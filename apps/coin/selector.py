@@ -4,4 +4,4 @@ from apps.coin.models import Coin
 
 
 def fetch_all_coin() -> QuerySet[Coin]:
-    return Coin.objects.all()
+    return Coin.objects.all().order_by("name")
