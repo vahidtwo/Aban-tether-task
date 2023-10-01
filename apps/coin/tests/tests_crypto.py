@@ -55,8 +55,14 @@ class CoinTestCase(TransactionTestCase):
 
     def test_get_coin_with_filter_coin(self):
         factories.CoinFactory.create_batch(10, network=self.network, exchange=self.exchange)
+        factories.CoinFactory.create(network=self.network, exchange=self.exchange, name="test")
+        factories.CoinFactory.create(network=self.network, exchange=self.exchange, name="aban", symbol="btc")
         url = reverse("coin.list")
-        response = self.client.get(url, data={"q": "0"})
+        response = self.client.get(url, data={"q": "es"})
         self.assertEquals(response.status_code, 200)
         data = response.json()
-        self.assertEquals(len(data), 2)
+        self.assertEquals(len(data), 1)
+        response = self.client.get(url, data={"q": "bt"})
+        self.assertEquals(response.status_code, 200)
+        data = response.json()
+        self.assertEquals(len(data), 1)
