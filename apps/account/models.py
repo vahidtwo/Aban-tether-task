@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-from django_lifecycle import LifecycleModelMixin, BEFORE_CREATE, hook, AFTER_CREATE
+from django_lifecycle import LifecycleModelMixin, hook, AFTER_CREATE
 
 from apps.account.managers import UserManager
 from core.lib.wallet.models import WalletTransactionBaseModel, WalletBaseModel
