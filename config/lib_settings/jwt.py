@@ -2,19 +2,15 @@ import datetime
 
 from config import env
 
-# For more config
-# Read everything from here - https://styria-digital.github.io/django-rest-framework-jwt/#additional-settings
 
-# Default to 7 days
-JWT_EXPIRATION_DELTA_SECONDS = env("JWT_EXPIRATION_DELTA_SECONDS", default=60 * 60 * 24 * 7)
-JWT_AUTH_COOKIE = env("JWT_AUTH_COOKIE", default="jwt")
-JWT_AUTH_HEADER_PREFIX = env("JWT_AUTH_HEADER_PREFIX", default="Bearer")
-
-
-JWT_AUTH = {
-    "JWT_EXPIRATION_DELTA": datetime.timedelta(seconds=JWT_EXPIRATION_DELTA_SECONDS),
-    "JWT_ALLOW_REFRESH": False,
-    "JWT_AUTH_COOKIE": JWT_AUTH_COOKIE,
-    "JWT_AUTH_COOKIE_SECURE": True,
-    "JWT_AUTH_HEADER_PREFIX": JWT_AUTH_HEADER_PREFIX,
+# TODO refactor it
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(seconds=env("ACCESS_TOKEN_LIFETIME", default=60 * 60 * 24 * 7)),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(seconds=env("REFRESH_TOKEN_LIFETIME", default=60 * 60 * 24 * 1)),
+    "UPDATE_LAST_LOGIN": False,
+    "ALGORITHM": "HS256",
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
 }
