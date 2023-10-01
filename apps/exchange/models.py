@@ -36,10 +36,10 @@ class Order(LifecycleModelMixin, TimeStampedBaseModel):
 
     user = models.ForeignKey("account.User", on_delete=models.PROTECT, related_name="orders", editable=False)
     coin = models.ForeignKey("coin.Coin", on_delete=models.PROTECT, related_name="orders", editable=False)
-    coin_price = models.FloatField(verbose_name=_("coin price"), editable=False)
-    amount = models.FloatField(verbose_name=_("amount"), editable=False)
-    total_price = models.FloatField(verbose_name=_("total price"), editable=False)
-    transfer_tax = models.FloatField(verbose_name=_("tax"), editable=False)
+    coin_price = models.DecimalField(max_digits=50, decimal_places=10, verbose_name=_("coin price"), editable=False)
+    amount = models.DecimalField(max_digits=50, decimal_places=10, verbose_name=_("amount"), editable=False)
+    total_price = models.DecimalField(max_digits=50, decimal_places=10, verbose_name=_("total price"), editable=False)
+    transfer_fee = models.DecimalField(max_digits=50, decimal_places=10, verbose_name=_("transfer fee"), editable=False)
     status = models.PositiveSmallIntegerField(
         default=OrderStatus.INIT,
         choices=OrderStatus.choices,

@@ -1,11 +1,17 @@
-def get_transfer_tax(coin: "Coin", amount: float) -> float:
+from decimal import Decimal
+
+from apps.coin.models import Coin
+from apps.exchange.exchange_schema import ExchangeABC
+
+
+def get_transfer_tax(coin: Coin, amount: Decimal) -> Decimal:
     """
     fetch transfer tax from market for a coin
     """
-    return 0.001
+    return Decimal(0.001)
 
 
-def buy_from_exchange(coin: "Coin", amount: float, exchange: "ExchangeABC") -> float:
+def buy_from_exchange(coin: Coin, amount: Decimal, exchange: ExchangeABC) -> Decimal:
     """
     buy currency from exchange for a coin
     this function implement in exchanges.py by Exchange classes
