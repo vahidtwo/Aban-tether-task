@@ -30,7 +30,7 @@ urlpatterns = [
     path("adm/", admin.site.urls),
     path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path("schema/", SpectacularAPIView.as_view(api_version="v1"), name="schema"),
-    path("api/v1/", include("apps.urls.api")),
+    path("api/v1/", include("apps.urls.v1")),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
 
