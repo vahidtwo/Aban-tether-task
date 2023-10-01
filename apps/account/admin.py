@@ -73,9 +73,7 @@ class UserAdmin(UserAdmin, BaseAdmin):
     )
 
 
-# TODO it must readonly current balance and add feature to admin just can add wallet transaction
-# in following admin models:
-#    UserWalletTransactionInline   UserWalletAdmin   UserCryptoWalletTransactionInline  UserWalletAdmin
+# TODO this section below must be refactor for the admin template
 
 
 class WalletTransactionPaginatorInline(TabularInlinePaginated):
