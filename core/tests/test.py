@@ -11,8 +11,7 @@ class TokenAPIClient(APIClient):
     def _set_token(self, user: User = None, user_id=None):
         if user is None:
             user = User.objects.get(user_id=user_id)
-        token, _ = Token.objects.get_or_create(user=user)
-        self.credentials(HTTP_AUTHORIZATION="Token {}".format(token.key))
+        self.credentials(HTTP_AUTHORIZATION="Bearer {}".format(user.tokens["access"]))
 
     def remove_token(self):
         self.credentials()
