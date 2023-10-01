@@ -41,7 +41,6 @@ class CoinTestCase(TransactionTestCase):
             self.assertEquals(response.status_code, 200)
             data = response.json()
             self.assertEquals(len(data), 3)
-            query_set.reset_mock()
 
     def test_get_coin_with_coin_price_mock(self):
         with mock.patch("apps.coin.utils.get_coin_price_from_market") as price:
@@ -58,11 +57,13 @@ class CoinTestCase(TransactionTestCase):
         factories.CoinFactory.create(network=self.network, exchange=self.exchange, name="test")
         factories.CoinFactory.create(network=self.network, exchange=self.exchange, name="aban", symbol="btc")
         url = reverse("coin.list")
-        response = self.client.get(url, data={"q": "es"})
+        response = self.client.get(url, data={"q": "es"})  # check search on name
         self.assertEquals(response.status_code, 200)
         data = response.json()
         self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["name"], "test")  # check search on name
         response = self.client.get(url, data={"q": "bt"})
         self.assertEquals(response.status_code, 200)
         data = response.json()
         self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["symbol"], "btc")
