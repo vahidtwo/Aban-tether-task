@@ -59,6 +59,11 @@ class Coin(BaseModel):
 
         return get_coin_price_from_market(self)
 
+    def get_buyer_price(self, amount: Decimal) -> Decimal:
+        from apps.coin.utils import get_transfer_tax
+
+        return (self.get_price() * amount) + get_transfer_tax(self, amount)
+
     get_price.short_description = _("price")
 
     class Meta:
