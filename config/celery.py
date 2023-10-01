@@ -18,11 +18,12 @@ packages = ["apps.exchange"]
 app.autodiscover_tasks(packages=packages)
 
 
-def check_task_is_running(task_import_path: str) -> bool:
+def check_task_is_running(task_import_path: str) -> bool:  # TODO str is not suitable type annotate
     """check one task is running in celery or not"""
     is_compute_task_is_running = False
     for worker_name, tasks in app.control.inspect().active().items():
         for task in tasks:
             if task["name"] == task_import_path:
                 is_compute_task_is_running = True
+                break
     return is_compute_task_is_running
