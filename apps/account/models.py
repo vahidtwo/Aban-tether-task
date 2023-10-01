@@ -9,7 +9,7 @@ from core.models.base import TimeStampedBaseModel
 from core.models.user import AbstractUser
 
 
-class User(LifecycleModelMixin, AbstractUser):
+class User(LifecycleModelMixin, AbstractUser, TimeStampedBaseModel):
     """
     User model representing individuals.
 
@@ -71,7 +71,7 @@ class User(LifecycleModelMixin, AbstractUser):
         verbose_name_plural = _("users")
 
 
-class UserWallet(WalletBaseModel):
+class UserWallet(WalletBaseModel, TimeStampedBaseModel):
     """
     Wallet model associated with a user.
 
@@ -93,7 +93,7 @@ class UserWallet(WalletBaseModel):
         return self.userwallettransaction_set
 
 
-class UserWalletTransaction(WalletTransactionBaseModel):
+class UserWalletTransaction(WalletTransactionBaseModel, TimeStampedBaseModel):
     """
     Transaction model for user wallets.
 
@@ -138,7 +138,7 @@ class UserCryptoWallet(LifecycleModelMixin, TimeStampedBaseModel, WalletBaseMode
         return self.usercryptowallettransaction_set
 
 
-class UserCryptoWalletTransaction(WalletTransactionBaseModel):
+class UserCryptoWalletTransaction(WalletTransactionBaseModel, TimeStampedBaseModel):
     """
     Transaction model for user crypto wallets.
 
