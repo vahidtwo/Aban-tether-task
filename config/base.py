@@ -23,7 +23,14 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
-PYPI_MODULES = ["rest_framework", "corsheaders", "drf_spectacular_sidecar", "drf_spectacular", "django_filters"]
+PYPI_MODULES = [
+    "rest_framework",
+    "corsheaders",
+    "drf_spectacular_sidecar",
+    "drf_spectacular",
+    "django_filters",
+    "django_admin_inline_paginator",
+]
 DJANGO_APP = [
     "jazzmin",
     "django.contrib.admin",
@@ -168,7 +175,7 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
-from config.lib_settings import celery  # noqa
-from config.lib_settings import jazzmin  # noqa
-from config.lib_settings import swagger  # noqa
-from config.lib_settings import jwt  # noqa
+from config.lib_settings.celery import *  # noqa
+from config.lib_settings.jazzmin import *  # noqa
+from config.lib_settings.swagger import *  # noqa
+from config.lib_settings.jwt import *  # noqa

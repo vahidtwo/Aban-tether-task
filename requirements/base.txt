@@ -15,3 +15,6 @@ drf-spectacular==0.26.5
 drf-spectacular-sidecar==2023.9.1
 Pillow==10.0.1
 django-redis==5.3.0
+django-filter~=23.3
+jdatetime~=4.1.1
+django-admin-inline-paginator==0.4.0
